@@ -5,7 +5,7 @@ RUN apt update -y && apt upgrade -y && apt install -y -qq g++ make wget patch li
 WORKDIR /usr/src
 RUN wget https://downloads.asterisk.org/pub/telephony/asterisk/asterisk-17-current.tar.gz
 RUN tar xvzf asterisk-17-current.tar.gz && rm asterisk-17-current.tar.gz
-WORKDIR asterisk-17.2.0
+WORKDIR asterisk-17.4.0
 RUN echo y | ./contrib/scripts/install_prereq install && echo y | ./contrib/scripts/get_mp3_source.sh
 RUN ./configure
 RUN make menuselect.makeopts
