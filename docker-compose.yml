@@ -1,0 +1,12 @@
+version: '3.5'
+services:
+  asterisk:
+    container_name: asterisk
+    build: .
+    image: asterisk:latest
+    volumes:
+      - ./asterisk/config:/etc/asterisk
+      - ./asterisk/data:/var/spool/asterisk
+      - ./asterisk/lib:/var/lib/asterisk
+    restart: always
+
