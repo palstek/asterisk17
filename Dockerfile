@@ -15,7 +15,7 @@ RUN menuselect/menuselect --disable BUILD_NATIVE \
   --disable-category MENUSELECT_MOH \
   --disable-category MENUSELECT_EXTRA_SOUNDS \
   menuselect.makeopts
-RUN make && make install && make samples && ldconfig && \
+RUN make -j4 && make -j4 install && make -j4 samples && ldconfig && \
   ### Backup original conf files
   for f in /etc/asterisk/*.conf; do cp -- "$f" "${f%.conf}.sample"; done && \
   mkdir /etc/asterisk/samples && mv /etc/asterisk/*.sample /etc/asterisk/samples/ && \
