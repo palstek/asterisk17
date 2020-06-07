@@ -1,7 +1,7 @@
 FROM ubuntu:18.04
 
 ARG DEBIAN_FRONTEND=noninteractive
-RUN apt update -y && apt upgrade -y && apt install -y -qq g++ make wget patch libedit-dev uuid-dev libjansson-dev libxml2-dev sqlite3 libsqlite3-dev libssl-dev mpg123
+RUN apt update -y && apt upgrade -y && apt install -y -qq g++ make wget patch libedit-dev uuid-dev libjansson-dev libxml2-dev sqlite3 libsqlite3-dev libssl-dev mpg123 libespeak-ng-dev libsamplerate0-dev mbrola mbrola-de1 mbrola-de2 mbrola-de3 mbrola-de4 mbrola-de5 mbrola-de6 mbrola-de7
 WORKDIR /usr/src
 RUN wget https://downloads.asterisk.org/pub/telephony/asterisk/asterisk-17-current.tar.gz
 RUN tar xvzf asterisk-17-current.tar.gz && rm asterisk-17-current.tar.gz
@@ -21,10 +21,21 @@ RUN make -j4 && make -j4 install && make -j4 samples && ldconfig && \
   mkdir /etc/asterisk/samples && mv /etc/asterisk/*.sample /etc/asterisk/samples/ && \
   ### Make conf files prettier
   for f in /etc/asterisk/*.conf; do sed -i '/^$/d' $f; sed -i '/^\s*;/d' $f; done && \
+  ### Copy header files to system directory
+  cp -a include/* /usr/include/ && \
   ### Clean up files
   apt-get -y autoremove && \
   apt-get clean && \
   rm -rf /var/lib/apt/lists/* /usr/src/*
+
+WORKDIR /usr/src
+RUN wget https://github.com/zaf/Asterisk-eSpeak/archive/v5.0-rc1.tar.gz
+RUN tar xvzf v5.0-rc1.tar.gz && rm v5.0-rc1.tar.gz
+WORKDIR Asterisk-eSpeak-5.0-rc1
+RUN make && make install && \
+  rm -rf /usr/src/*
+
+WORKDIR /etc/asterisk
 
 EXPOSE 5060 5061
 
