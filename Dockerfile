@@ -1,11 +1,12 @@
 FROM ubuntu:18.04
 
 ARG DEBIAN_FRONTEND=noninteractive
+ARG ASTERISK_VERSION=17.5.0
 RUN apt update -y && apt upgrade -y && apt install -y -qq g++ make wget patch libedit-dev uuid-dev libjansson-dev libxml2-dev sqlite3 libsqlite3-dev libssl-dev mpg123 libespeak-ng-dev libsamplerate0-dev mbrola mbrola-de1 mbrola-de2 mbrola-de3 mbrola-de4 mbrola-de5 mbrola-de6 mbrola-de7
 WORKDIR /usr/src
-RUN wget https://downloads.asterisk.org/pub/telephony/asterisk/asterisk-17-current.tar.gz
-RUN tar xvzf asterisk-17-current.tar.gz && rm asterisk-17-current.tar.gz
-WORKDIR asterisk-17.4.0
+RUN wget https://downloads.asterisk.org/pub/telephony/asterisk/releases/asterisk-${ASTERISK_VERSION}.tar.gz
+RUN tar xvzf asterisk-${ASTERISK_VERSION}.tar.gz && rm asterisk-${ASTERISK_VERSION}.tar.gz
+WORKDIR asterisk-${ASTERISK_VERSION}
 RUN echo y | ./contrib/scripts/install_prereq install && echo y | ./contrib/scripts/get_mp3_source.sh
 RUN ./configure
 RUN make menuselect.makeopts
